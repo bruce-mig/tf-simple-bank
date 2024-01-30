@@ -1,5 +1,5 @@
-output "environment_url"{
-    value = module.simplebank_alb.dns_name
+output "environment_url" {
+  value = module.simplebank_alb.dns_name
 }
 
 output "ec2_public_ip" {

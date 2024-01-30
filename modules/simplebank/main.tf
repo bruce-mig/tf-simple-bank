@@ -11,33 +11,33 @@ data "aws_ami" "app_ami" {
     values = ["hvm"]
   }
 
-  owners = [var.ami_filter.owner] 
+  owners = [var.ami_filter.owner]
 }
 
 module "simplebank_vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = var.environment.name
-  cidr = "${var.environment.network_prefix}.0.0/16"
+  name = terraform.workspace
+  cidr = "${lookup(var.network_prefix, terraform.workspace, "10.1")}.0.0/16"
 
-  azs = ["af-south-1a", "af-south-1b", "af-south-1c"]
+  azs = var.azs
   public_subnets = [
-    "${var.environment.network_prefix}.101.0/24", 
-    "${var.environment.network_prefix}.102.0/24", 
-    "${var.environment.network_prefix}.103.0/24"
+    "${lookup(var.network_prefix, terraform.workspace, "10.1")}.101.0/24",
+    "${lookup(var.network_prefix, terraform.workspace, "10.1")}.102.0/24",
+    "${lookup(var.network_prefix, terraform.workspace, "10.1")}.103.0/24"
   ]
 
   enable_nat_gateway = true
 
   tags = {
-    Terraform = "true"
-    Environment = var.environment.name
+    Terraform   = "true"
+    Environment = terraform.workspace
   }
 }
 
 # module "autoscaling" {
 #   source  = "terraform-aws-modules/autoscaling/aws"
-  
+
 #   name     =  "${var.environment.name}-simplebank"
 #   min_size = var.asg_min_size
 #   max_size = var.asg_max_size
@@ -45,7 +45,7 @@ module "simplebank_vpc" {
 #   vpc_zone_identifier = module.simplebank_vpc.public_subnets
 #   target_group_arns   = module.simplebank_alb.target_groups.arn
 #   security_groups     = [ module.simplebank_sg.security_group_id ]
-  
+
 #   key_name = aws_key_pair.ssh-key.key_name
 
 #   image_id      = data.aws_ami.app_ami.id
@@ -59,16 +59,16 @@ module "simplebank_vpc" {
 # }
 
 resource "aws_instance" "simplebank-app" {
-  ami = data.aws_ami.app_ami.id
+  ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
 
-  subnet_id = module.simplebank_vpc.public_subnets[0]
-  vpc_security_group_ids = [ module.simplebank_sg.security_group_id ]
-  availability_zone = module.simplebank_vpc.azs[0]
+  subnet_id              = module.simplebank_vpc.public_subnets[0]
+  vpc_security_group_ids = [module.simplebank_sg.security_group_id]
+  availability_zone      = module.simplebank_vpc.azs[0]
 
   associate_public_ip_address = true
-  key_name = aws_key_pair.ssh-key.key_name
-  
+  key_name                    = aws_key_pair.ssh-key.key_name
+
   user_data = file("../entry-script.sh")
 
   # connection {
@@ -92,7 +92,7 @@ resource "aws_instance" "simplebank-app" {
   # }
 
   tags = {
-    Name = "${var.environment.name}-server"
+    Name = "${terraform.workspace}-server"
   }
 }
 
@@ -100,12 +100,12 @@ resource "aws_instance" "simplebank-app" {
 module "simplebank_alb" {
   source = "terraform-aws-modules/alb/aws"
 
-  name    = "${var.environment.name}-simplebank-alb"
+  name    = "${terraform.workspace}-simplebank-alb"
   vpc_id  = module.simplebank_vpc.vpc_id
   subnets = module.simplebank_vpc.public_subnets
 
   # Security Group
-  security_groups = [ module.simplebank_sg.security_group_id ]
+  security_groups = [module.simplebank_sg.security_group_id]
 
   listeners = {
     ex-http-https-redirect = {
@@ -125,15 +125,15 @@ module "simplebank_alb" {
 
   target_groups = {
     ex-instance = {
-      name_prefix      = "h1"
-      protocol         = "HTTP"
-      port             = 80
-      target_type      = "instance"
+      name_prefix = "h1"
+      protocol    = "HTTP"
+      port        = 80
+      target_type = "instance"
     }
   }
 
   tags = {
-    Environment = "Development"
+    Environment = terraform.workspace
     Project     = "Example"
   }
 }
@@ -142,7 +142,7 @@ module "simplebank_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
 
-  name                = "${var.environment.name}-simplebank"
+  name                = "${terraform.workspace}-simplebank"
   vpc_id              = module.simplebank_vpc.vpc_id
   ingress_rules       = ["http-80-tcp", "https-443-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
@@ -151,6 +151,6 @@ module "simplebank_sg" {
 }
 
 resource "aws_key_pair" "ssh-key" {
-  key_name = "server-key"
+  key_name   = "server-key"
   public_key = file(var.public_key_location)
 }
