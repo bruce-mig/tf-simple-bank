@@ -1,7 +1,7 @@
 variable "instance_type" {
   description = "Type of EC2 instance to provision"
   type        = string
-  default     = "t3.nano"
+  default     = "t2.micro"
 }
 
 variable "ami_filter" {
@@ -27,18 +27,6 @@ variable "network_prefix" {
     "tf-simple-bank-qa"   = "10.1"
     "tf-simple-bank-prod" = "10.2"
   }
-}
-
-variable "asg_min_size" {
-  description = "Minimum number of instances in the ASG"
-  type        = number
-  default     = 0
-}
-
-variable "asg_max_size" {
-  description = "Maximum number of instances in the ASG"
-  type        = number
-  default     = 0
 }
 
 variable "public_key_location" {
@@ -71,4 +59,21 @@ variable "db_password" {
   description = "password for postges db"
   type        = string
   sensitive   = true
+}
+
+variable "sg_ingress_rules " {
+  description = "List of allowed ingress rules for the security group"
+  type        = list(string)
+  default     = ["http-80-tcp", "http-8080-tcp", "https-443-tcp", "ssh-tcp"]
+}
+
+variable "db_name" {
+  description = "The name of the database"
+  type        = string
+  default     = "simple-bank"
+}
+
+variable "db_username" {
+  description = "Name of the db user"
+  type        = string
 }
