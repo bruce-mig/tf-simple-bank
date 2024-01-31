@@ -23,9 +23,9 @@ variable "network_prefix" {
 
   type = map(string)
   default = {
-    "dev"  = "10.0"
-    "qa"   = "10.1"
-    "prod" = "10.2"
+    "tf-simple-bank-dev"  = "10.0"
+    "tf-simple-bank-qa"   = "10.1"
+    "tf-simple-bank-prod" = "10.2"
   }
 }
 
