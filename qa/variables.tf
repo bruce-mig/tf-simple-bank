@@ -18,3 +18,8 @@ variable "private_key_location" {
   description = "File location of the ssh private key"
   type        = string
 }
+
+variable "db_username" {
+  description = "Name of the db user"
+  type        = string
+}

@@ -5,6 +5,7 @@ module "dev" {
   private_key_location = var.private_key_location
   ec2_user             = var.ec2_user
   db_password          = var.db_password
+  db_username          = var.db_username
 }
 
 # data "vault_kv_secret_v2" "example" {
