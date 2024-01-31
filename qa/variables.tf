@@ -1,7 +1,7 @@
 variable "db_password" {
   description = "password for postges db"
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }
 
 variable "public_key_location" {

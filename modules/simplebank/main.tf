@@ -97,7 +97,7 @@ resource "aws_instance" "simplebank-app" {
     Name = "${terraform.workspace}-server"
   }
 
-  depends_on = [ module.simplebank_postgres_db ]
+  depends_on = [module.simplebank_postgres_db]
 }
 
 
