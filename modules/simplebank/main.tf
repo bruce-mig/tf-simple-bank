@@ -29,6 +29,7 @@ module "simplebank_vpc" {
 
   enable_nat_gateway = true
 
+
   tags = {
     Terraform   = "true"
     Environment = terraform.workspace
@@ -67,7 +68,7 @@ resource "aws_instance" "simplebank-app" {
   availability_zone      = module.simplebank_vpc.azs[0]
 
   associate_public_ip_address = true
-  key_name                    = aws_key_pair.ssh-key.key_name
+  key_name                    = aws_key_pair.test_ssh-key.key_name
 
   user_data = file("../entry-script.sh")
 
@@ -80,11 +81,12 @@ resource "aws_instance" "simplebank-app" {
 
   # provisioner "file" {
   #   source = "entry-script.sh"
-  #   destination = "/home/${var.ec2_user}/ec2-entry-script.sh"
+  #   destination = "/home/${var.ec2_user}/entry-script.sh"
   # }
 
   # provisioner "remote-exec" {
-  #   script = file("ec2-entry-script.sh")
+  #   script = file("entry-script.sh")
+  #   on_failure = fail
   # }
 
   # provisioner "local-exec" {
@@ -150,7 +152,7 @@ module "simplebank_sg" {
   egress_cidr_blocks  = ["0.0.0.0/0"]
 }
 
-resource "aws_key_pair" "ssh-key" {
-  key_name   = "server-key"
+resource "aws_key_pair" "test_ssh-key" {
+  key_name   = "server-ssh-key"
   public_key = file(var.public_key_location)
 }
