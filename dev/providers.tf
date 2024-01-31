@@ -1,8 +1,8 @@
 # terraform {
 #   required_version = ">=0.12"
 #   backend "s3" {
-#     bucket = "simplebank-backend-29012024"
-#     key = "tfstate/terraform.tfstate"
+#     bucket = "terraform-backend-31012024"
+#     key = "simplebank_backend.tfstate"
 #     region = var.region
 #     encrypt = true
 #     dynamodb_table = "terraform-lock-table"
