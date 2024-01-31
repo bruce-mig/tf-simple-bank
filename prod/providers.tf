@@ -5,6 +5,14 @@ terraform {
       version = "5.34.0"
     }
   }
+
+  cloud {
+    organization = "bruce-mig"
+    workspaces {
+      name = "tf-simple-bank-prod"
+    }
+  }
+
   #   backend "s3" {
   #     bucket = "terraform-backend-31012024"
   #     key = "simplebank_prod_backend.tfstate"

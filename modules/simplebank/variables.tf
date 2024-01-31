@@ -66,3 +66,9 @@ variable "azs" {
   type        = list(string)
   default     = ["af-south-1a", "af-south-1b", "af-south-1c"]
 }
+
+variable "db_password" {
+  description = "password for postges db"
+  type = string
+  sensitive = true
+}

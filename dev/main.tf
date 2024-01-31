@@ -1,7 +1,13 @@
 module "dev" {
   source = "../modules/simplebank"
 
-  public_key_location  = "/home/migeri/.ssh/test_rsa.pub"
-  private_key_location = "/home/migeri/.ssh/test_rsa"
-  ec2_user             = "ec2-user"
+  public_key_location  = var.public_key_location
+  private_key_location = var.private_key_location
+  ec2_user             = var.ec2_user
+  db_password          = var.db_password
 }
+
+# data "vault_kv_secret_v2" "example" {
+#   mount = "secret" // change it according to your mount
+#   name  = "test-secret" // change it according to your secret
+# }

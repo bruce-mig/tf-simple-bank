@@ -6,6 +6,12 @@ terraform {
     }
   }
 
+  cloud {
+    organization = "bruce-mig"
+    workspaces {
+      name = "tf-simple-bank-qa"
+    }
+  }
   #   backend "s3" {
   #     bucket = "terraform-backend-31012024"
   #     key = "simplebank_qa_backend.tfstate"
