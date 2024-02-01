@@ -61,7 +61,7 @@ variable "db_password" {
   sensitive   = true
 }
 
-variable "sg_ingress_rules " {
+variable "sg_ingress_rules" {
   description = "List of allowed ingress rules for the security group"
   type        = list(string)
   default     = ["http-80-tcp", "http-8080-tcp", "https-443-tcp", "ssh-tcp"]

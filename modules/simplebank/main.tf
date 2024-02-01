@@ -26,6 +26,7 @@ module "simplebank_vpc" {
     "${lookup(var.network_prefix, terraform.workspace, "10.0")}.102.0/24",
     "${lookup(var.network_prefix, terraform.workspace, "10.0")}.103.0/24"
   ]
+  create_igw = true
 
   tags = {
     Terraform   = "true"
@@ -43,6 +44,7 @@ module "ec2_instance" {
   key_name               = aws_key_pair.test_ssh-key.key_name
   vpc_security_group_ids = [module.simplebank_sg.security_group_id]
   subnet_id              = module.simplebank_vpc.public_subnets[0]
+  availability_zone      = module.simplebank_vpc.azs[0]
 
   user_data = file("../entry-script.sh")
   tags = {
