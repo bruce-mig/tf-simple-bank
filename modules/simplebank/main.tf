@@ -111,7 +111,7 @@ module "simplebank_postgres_db" {
   max_allocated_storage = 5
 
   db_name  = var.db_name
-  username = "root"
+  username = var.db_username
   password = var.db_password
   port     = 5432
 

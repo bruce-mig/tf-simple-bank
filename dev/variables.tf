@@ -23,3 +23,8 @@ variable "db_username" {
   description = "Name of the db user"
   type        = string
 }
+
+variable "region" {
+  type    = string
+  default = "af-south-1"
+}
