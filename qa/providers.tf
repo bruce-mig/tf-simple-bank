@@ -12,13 +12,13 @@ terraform {
       name = "tf-simple-bank-qa"
     }
   }
-  #   backend "s3" {
-  #     bucket = "terraform-backend-31012024"
-  #     key = "simplebank_qa_backend.tfstate"
-  #     region = var.region
-  #     encrypt = true
-  #     dynamodb_table = "terraform-lock-table"
-  #   }
+  # backend "s3" {
+  #   bucket = "simple-bank-tf-state"
+  #   key = "tf-simplebank/qa-terraform.tfstate"
+  #   region = var.region
+  #   encrypt = true
+  #   dynamodb_table = "terraform-state-locking"
+  # }
 }
 
 provider "aws" {

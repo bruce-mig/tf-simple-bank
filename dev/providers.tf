@@ -12,11 +12,11 @@ terraform {
     }
   }
   # backend "s3" {
-  #   bucket = "terraform-backend-31012024"
-  #   key = "simplebank_dev_backend.tfstate"
+  #   bucket = "simple-bank-tf-state"
+  #   key = "tf-simplebank/dev-terraform.tfstate"
   #   region = var.region
   #   encrypt = true
-  #   dynamodb_table = "terraform-lock-table"
+  #   dynamodb_table = "terraform-state-locking"
   # }
 }
 
